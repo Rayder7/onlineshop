@@ -1,0 +1,23 @@
+{% extends 'onlineshop/base.html' %}
+{% load static %}
+{% block content %}
+<h1>{{product.firm }} {{ product.name}}</h1>
+<div class="product-detail">
+{% if product.image %}
+<p><img class="img-article-left" src="{{product.image.url}}"></p>
+{% endif %}
+<h2>
+    <a href="{{ product.cat.get_absolute_url }}">{{ product.cat }}</a>
+</h2>
+<p class="price">{{ product.price }} ₽ </p>
+    <form action="{% url 'cart:cart_add' product.id %}" method="post">
+        {{ cart_product_form }}
+        {% csrf_token %}
+        <input type="submit" value="В корзину">
+    </form>
+
+{{product.description|linebreaks}}
+
+</div>
+
+{% endblock %}

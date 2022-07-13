@@ -1,0 +1,19 @@
+	{% for p in posts %}
+			<li><div class="article-panel">
+	<p class="first">Категория: {{p.cat}}</p>
+	<p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
+			</div>
+{% if p.photo %}
+	<p><img class="img-article-left thumb" src="{{p.photo.url}}"></p>
+{% endif %}
+
+
+				<h2> {{p.firm}} {{p.title}}</h2>
+
+	{% autoescape on %}
+	{{p.content|linebreaks|truncatewords:15}}
+	{% endautoescape %}
+			<div class="clear"></div>
+			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать описание</a></p>
+			</li>
+	{% endfor %}
