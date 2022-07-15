@@ -6,13 +6,16 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework import generics, viewsets
+from rest_framework import generics, viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import GenericViewSet
 
 from cart.forms import CartAddProductForm
 from .forms import *
 from .models import *
+from .permissions import IsAdminOrReadOnly
 from .serializers import ProductSerializer
 from .utils import *
 
@@ -138,23 +141,14 @@ def product_detail(request, product_slug):
 
 ##################### API
 
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+class ProductViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
     serializer_class = ProductSerializer
+    permission_classes = (IsAdminOrReadOnly,)
 
-class ProductViewSetpub(viewsets.ReadOnlyModelViewSetViewSet): # для только чтения
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    def get_queryset(self):
+        return Product.objects.all()[:]
 
-# class ProductAPIList(generics.ListCreateAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#
-# class ProductAPIUpdate(generics.UpdateAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#
-# class ProductAPIDetailView(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-
+    @action(methods=['get'], detail=False)
+    def category(self, request):
+        cats = Category.objects.all()
+        return Response({'cats': [c.name for c in cats]})

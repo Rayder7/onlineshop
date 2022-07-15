@@ -4,7 +4,7 @@ from onlineshop.views import *
 from rest_framework import routers
 
 router = routers.SimpleRouter()
-router.register(r'product', ProductViewSet)
+router.register(r'product', ProductViewSet, basename='product')
 
 urlpatterns = [
     path('', onlineshopHome.as_view(), name='home'),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('product/<slug:product_slug>/', ShowProduct.as_view(), name='product'),
     path('category/<slug:cat_slug>/', ProductCategory.as_view(), name='category'),
 
+    path('api/v1/drf-auth/', include('rest_framework.urls')), # Session-based authentication
     path('api/v1/', include(router.urls)),
 
     ]

@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-
+from django.contrib.auth.models import User
 
 
 class Product(models.Model):
@@ -15,6 +15,7 @@ class Product(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     available = models.BooleanField(default=True, verbose_name='Наличие')
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, related_name='product')
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
