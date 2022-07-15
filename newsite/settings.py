@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'cart',
     'blog',
     'rest_framework',
+    'ApiDRF',
 
 ]
 

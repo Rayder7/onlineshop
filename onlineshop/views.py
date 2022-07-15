@@ -1,22 +1,16 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
-from django.forms import model_to_dict
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.http import HttpResponseNotFound
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from rest_framework import generics, viewsets, mixins
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.viewsets import GenericViewSet
+
 
 from cart.forms import CartAddProductForm
 from .forms import *
 from .models import *
-from .permissions import IsAdminOrReadOnly
-from .serializers import ProductSerializer
+
 from .utils import *
 
 
@@ -139,16 +133,3 @@ def product_detail(request, product_slug):
     cart_product_form = CartAddProductForm()
     return render(request, 'onlineshop/product.html', {'product': product, 'cart_product_form': cart_product_form})
 
-##################### API
-
-class ProductViewSet(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.ListModelMixin, GenericViewSet):
-    serializer_class = ProductSerializer
-    permission_classes = (IsAdminOrReadOnly,)
-
-    def get_queryset(self):
-        return Product.objects.all()[:]
-
-    @action(methods=['get'], detail=False)
-    def category(self, request):
-        cats = Category.objects.all()
-        return Response({'cats': [c.name for c in cats]})

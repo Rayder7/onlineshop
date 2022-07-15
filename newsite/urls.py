@@ -24,6 +24,7 @@ from onlineshop.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('cart/', include('cart.urls', namespace='cart')),
+    path('api/', include('ApiDRF.urls')),
     path('blog/', include(('blog.urls', 'blog'), namespace='blog')),
     path('captcha/', include('captcha.urls')),
     path('', include('onlineshop.urls')),
