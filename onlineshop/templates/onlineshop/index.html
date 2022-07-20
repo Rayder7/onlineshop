@@ -3,23 +3,23 @@
 {% block content %}
 <ul class="list-articles">
 	{% for p in posts %}
-			<li><div class="article-panel">
-	<p class="first">Категория: {{p.cat}}</p>
-	<p class="last">Дата: {{p.time_update|date:"d-m-Y H:i:s"}}</p>
-			</div>
-{% if p.image %}
-	<p><img class="img-article-left thumb" src="{{p.image.url}}"></p>
-{% endif %}
+	<li><div class="article-panel">
+		<p class="detailcat">Категория: {{p.cat}}</p>
+		<h2> {{p.firm}} {{p.name}}</h2>
+		<p class="detailcat">Цена: {{p.price}} р.</p>
 
 
-				<h2> {{p.firm}} {{p.name}}</h2>
+		{% if p.image %}
+			<p><img class="img-list" src="{{p.image.url}}"></p>
+		{% endif %}
 
-	{% autoescape on %}
-	{{p.description|linebreaks|truncatewords:35}}
-	{% endautoescape %}
-			<div class="clear"></div>
-			<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать описание</a></p>
-			</li>
-	{% endfor %}
+			{% autoescape on %}
+			{{p.description|linebreaks|truncatewords:35}}
+			{% endautoescape %}
+					<div class="clear"></div>
+					<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать описание</a></p>
+		</li>
+			{% endfor %}
+	</div>
 </ul>
 {% endblock %}
