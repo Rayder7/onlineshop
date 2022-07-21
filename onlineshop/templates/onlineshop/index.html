@@ -4,21 +4,35 @@
 <ul class="list-articles">
 	{% for p in posts %}
 	<li><div class="article-panel">
-		<p class="detailcat">Категория: {{p.cat}}</p>
-		<h2> {{p.firm}} {{p.name}}</h2>
-		<p class="detailcat">Цена: {{p.price}} р.</p>
 
+		<div class="catalog-product_image">
+			{% if p.image %}
+			<p><img class="catalog-product_image" src="{{p.image.url}}"></p>
+		</div>
 
-		{% if p.image %}
-			<p><img class="img-list" src="{{p.image.url}}"></p>
-		{% endif %}
-
+		<div class="catalog-product_description">
+			<a class="catalog-product_description" href="{{ p.get_absolute_url }}">{{p.firm}} {{p.name}}</a>
+			<p class="catalog-product_description">Категория: {{p.cat}}</p>
 			{% autoescape on %}
 			{{p.description|linebreaks|truncatewords:35}}
 			{% endautoescape %}
-					<div class="clear"></div>
-					<p class="link-read-post"><a href="{{ p.get_absolute_url }}">Читать описание</a></p>
-		</li>
+
+		</div>
+		<div class="catalog-product_cart">
+			<p class="detailcat">Цена: {{p.price}} р.</p>
+
+		</div>
+
+		<div class="catalog-product_avails">
+			<p class="detailcat">В наличии: {{ p.stock }} шт.
+		</div>
+
+
+
+		{% endif %}
+
+
+	</li>
 			{% endfor %}
 	</div>
 </ul>
